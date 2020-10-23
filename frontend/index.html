@@ -1,0 +1,83 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Maske auf</title>
+  <meta name="description" content="Maske auf!">
+  <meta name="author" content="Till Klocke">
+
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+  <style> 
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .content {
+      padding: 5pt;
+      min-height: 100%;
+    }
+    .icon {
+      height: 200px;
+    }
+    p {
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: large;
+    }
+  </style> 
+
+</head>
+
+<body>
+  <div class="content">
+    <figure>
+      <img class="icon" id="icon" style="display: block; margin-left: auto; margin-right: auto">
+    </figure>
+    <p id="text" style="margin-left: auto; margin-right: auto">
+    </p>
+  </div>
+
+  <script>
+    var iconElem = document.getElementById("icon");
+    var textElem = document.getElementById("text")
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        textElem.innerHTML = "Geolocation scheint hier nicht zur Verfügung zu stehen";
+      }
+    }
+    
+    function showPosition(position) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4) {
+          resp = JSON.parse(xmlHttp.responseText)
+          if (resp.mask_meeded) {
+            textElem.innerHTML = "Im Bereich " + resp.zone_name + " musst du auf jeden Fall eine Maske tragen! Natürlich auch über der Nase!";
+            if (getRandomInt(10)%2 == 0){
+              iconElem.src = "/face-mask-woman.svg"
+            } else {
+              iconElem.src = "/face-mask-boy.svg"
+            }
+          } else {
+            textElem.innerHTML = "Hier musst du nicht unbedingt eine Maske tragen wenn du draußen bist. Wenn viele Menschen um dich rum sind oder du Abstände nicht einhalten kannst, ist es trotzdem eine gute Idee die Maske aufzusetzen";
+            iconElem.src = "/smiley.svg"
+          }
+        }
+      };
+      xmlHttp.open("GET", "/maske?lat="+position.coords.latitude+"&lon="+position.coords.longitude, true);
+      xmlHttp.send(null);
+    }
+
+    getLocation();
+
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
+    </script>
+</body>
+</html>

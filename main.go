@@ -44,6 +44,7 @@ func main() {
 		r := mux.NewRouter()
 
 		r.Path("/maske").Methods(http.MethodGet).HandlerFunc(handleGet(cache))
+		r.PathPrefix("/").Methods(http.MethodGet).Handler(frontendHandler())
 
 		server := &http.Server{
 			Handler:      r,

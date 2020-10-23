@@ -9,8 +9,13 @@ LDFLAGS         				?= -X main.Version=$(VERSION) \
 .PHONY: build clean test
 .DEFAULT_GOAL := build
 
-dist/maske-auf: test
+dist/frontend:
+	mkdir -p dist/frontend
+	cp -r ./frontend/* ./dist/frontend/
+
+dist/maske-auf: test dist/frontend
 	mkdir -p dist
+	packr2
 	$(GO_BUILD_ENV_VARS) go build -o dist/maske-auf -ldflags "$(LDFLAGS)"
 
 build: dist/maske-auf

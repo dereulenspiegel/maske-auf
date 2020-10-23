@@ -1,3 +1,4 @@
 dist/
 *.coverprofile
 *-packr.go
+packrd/
