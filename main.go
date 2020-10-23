@@ -20,8 +20,19 @@ var (
 	httpAddr       = flag.String("addr", ":8080", "The address to listen on")
 )
 
+var (
+	Version = "undefined"
+	Commit  = "undefined"
+)
+
 func main() {
 	flag.Parse()
+	logger := logrus.WithFields(logrus.Fields{
+		"version": Version,
+		"commit":  Commit,
+	})
+
+	logger.Info("Starting")
 
 	killSignal := make(chan os.Signal, 1)
 	errChan := make(chan error, 1)
@@ -50,7 +61,7 @@ func main() {
 	case <-killSignal:
 		os.Exit(0)
 	case err := <-errChan:
-		logrus.WithError(err).Fatal("Something failed")
+		logger.WithError(err).Fatal("Something failed")
 	}
 }
 
