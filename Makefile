@@ -6,7 +6,7 @@ LDFLAGS         				?= -X main.Version=$(VERSION) \
 													 -X main.Commit=$(GIT_COMMIT) \
 													 -w -s
 
-.PHONY: build clean test
+.PHONY: build build-linux clean test
 .DEFAULT_GOAL := build
 
 dist/frontend:
@@ -18,7 +18,14 @@ dist/maske-auf: test dist/frontend
 	packr2
 	$(GO_BUILD_ENV_VARS) go build -o dist/maske-auf -ldflags "$(LDFLAGS)"
 
+dist/maske-auf-linux-amd64: test dist/frontend
+	mkdir -p dist
+	packr2
+	GOOS=linux GOARCH=amd64 $(GO_BUILD_ENV_VARS) go build -o dist/maske-auf-linux-amd64 -ldflags "$(LDFLAGS)"
+
 build: dist/maske-auf
+
+build-linux: dist/maske-auf-linux-amd64
 
 test:
 	go test -v -race -covermode=atomic -coverprofile=single.coverprofile
