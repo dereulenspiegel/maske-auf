@@ -14,7 +14,9 @@ Schritte
 * go installieren (https://golang.org/dl/)
 * packr2 installieren `go get -u github.com/gobuffalo/packr/v2/packr2`
 * Make installieren, falls noch nicht vorhanden
-* `make build` oder `make build-linux` aufrufen. `make build` baut für dein aktuelles Betriebssystem. `make build-linux` immer für Linux mit Arch AMD64
+* `make build` oder `make build-linux` aufrufen. `make build` baut für dein aktuelles Betriebssystem. `make build-linux` baut immer für Linux mit Arch AMD64
+
+Die Build-Artifakte findet man anschließend im Ordner `dist`
 
 # Benutzung
 
