@@ -40,7 +40,7 @@ steps:
     source:
     - dist/maske-auf
     strip_components: 1
-    rm: true
+    rm: false
     key:
       from_secret: uberspace_key
 - name: Restart service
