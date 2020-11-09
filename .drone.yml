@@ -1,0 +1,59 @@
+platform:
+  os: linux
+  arch: arm
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: Test
+  image: golang:1.15
+  commands:
+  - go get -u github.com/gobuffalo/packr/v2/packr2
+  - make test
+
+---
+platform:
+  os: linux
+  arch: arm
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: build
+  image: golang:1.15
+  environment:
+    GOOS: linux
+    GOARCH: amd64
+  commands:
+  - go get -u github.com/gobuffalo/packr/v2/packr2
+  - make build
+- name: copy binary to uberspace
+  image: appleboy/drone-scp
+  settings:
+    host: tillk.uber.space
+    username: tillk
+    target: /home/tillk/bin/
+    source:
+    - dist/maske-auf
+    strip_components: 1
+    rm: true
+    key:
+      from_secret: uberspace_key
+- name: Restart service
+  image: appleboy/drone-ssh
+  settings:
+    host: tillk.uber.space
+    username: tillk
+    key:
+      from_secret: uberspace_key
+    script:
+      - supervisorctl restart maske-auf
+
+trigger:
+  branch:
+  - main
+  event:
+    exclude:
+    - pull_request
