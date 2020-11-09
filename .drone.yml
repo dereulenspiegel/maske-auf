@@ -52,6 +52,16 @@ steps:
       from_secret: uberspace_key
     script:
       - supervisorctl restart maske-auf
+- name: release on codeberg
+  image: plugins/gitea-release
+  settings:
+    api_key:
+      from_secret: codeberg_api_key
+    base_url: https://codeberg.org
+    files: dist/*
+  when:
+    event:
+    - tag
 
 trigger:
   branch:
@@ -59,3 +69,23 @@ trigger:
   event:
     exclude:
     - pull_request
+
+---
+platform:
+  os: linux
+  arch: arm
+kind: pipeline
+type: docker
+name: build-and-release
+steps:
+- name: test
+  image: golang:1.15
+  commands:
+  - make test
+- name: build
+  image: golang:1.15
+  commands:
+  - go get -u github.com/gobuffalo/packr/v2/packr2
+  - go install github.com/gobuffalo/packr/v2/packr2
+  - GOOS=linux GOARCH=amd64 make dist/maske-auf
+
