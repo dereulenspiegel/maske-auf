@@ -13,7 +13,7 @@ dist/frontend:
 	mkdir -p dist/frontend
 	cp -r ./frontend/* ./dist/frontend/
 
-dist/maske-auf: test dist/frontend
+dist/maske-auf: dist/frontend
 	mkdir -p dist
 	packr2
 	$(GO_BUILD_ENV_VARS) go build -o dist/maske-auf -ldflags "$(LDFLAGS)"
@@ -23,7 +23,7 @@ dist/maske-auf-linux-amd64: test dist/frontend
 	packr2
 	GOOS=linux GOARCH=amd64 $(GO_BUILD_ENV_VARS) go build -o dist/maske-auf-linux-amd64 -ldflags "$(LDFLAGS)"
 
-build: dist/maske-auf
+build: test dist/maske-auf
 
 build-linux: dist/maske-auf-linux-amd64
 
