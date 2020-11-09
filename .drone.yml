@@ -3,7 +3,7 @@ platform:
   arch: arm
 kind: pipeline
 type: docker
-name: default
+name: default-test
 
 steps:
 - name: Test
@@ -18,7 +18,7 @@ platform:
   arch: arm
 kind: pipeline
 type: docker
-name: default
+name: build-and-deploy
 
 steps:
 - name: build
