@@ -28,7 +28,7 @@ build: dist/maske-auf
 build-linux: dist/maske-auf-linux-amd64
 
 test:
-	go test -v -race -covermode=atomic -coverprofile=single.coverprofile
+	go test -v -covermode=atomic -coverprofile=single.coverprofile
 
 clean:
 	rm -rf dist/
