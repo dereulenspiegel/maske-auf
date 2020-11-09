@@ -28,7 +28,7 @@ steps:
     GOARCH: amd64
   commands:
   - go get -u github.com/gobuffalo/packr/v2/packr2
-  - make build
+  - make dist/maske-auf
 - name: copy binary to uberspace
   image: appleboy/drone-scp
   settings:
