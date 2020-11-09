@@ -11,7 +11,10 @@ steps:
   commands:
   - go get -u github.com/gobuffalo/packr/v2/packr2
   - make test
-
+trigger:
+  event:
+    include:
+    - pull_request
 ---
 platform:
   os: linux
@@ -43,6 +46,9 @@ steps:
     rm: false
     key:
       from_secret: uberspace_key
+  when:
+    branch:
+    - main
 - name: Restart service
   image: appleboy/drone-ssh
   settings:
@@ -52,6 +58,9 @@ steps:
       from_secret: uberspace_key
     script:
       - supervisorctl restart maske-auf
+  when:
+    branch:
+    - main
 - name: release on codeberg
   image: plugins/gitea-release
   settings:
@@ -64,9 +73,6 @@ steps:
     - tag
 
 trigger:
-  branch:
-  - main
   event:
     exclude:
     - pull_request
-
